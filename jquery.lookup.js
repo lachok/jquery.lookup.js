@@ -14,13 +14,12 @@
 		var lookupData = [];
 
 		var defaults = {
-			lookupRegex: /\d{1,6}/,
+			lookupRegex: /\d{1,6}/, // regex to determine matches
 			lookupUrl: 'results_21306.js', // the url with lookup data
 			textboxSelector: this.selector, // the text entry elements to watch
-			propertyToMatch: 'sailnos',
-			propertiesToReturn: ['Classtype', 'sailnos', 'sailor'],
-			resultFormat: '{0} {1} ({2})',
-			suggestionsBoxCssClass: 'suggestionsBox'
+			propertyToMatch: 'sailnos', // property against which to lookup
+			propertiesToReturn: ['Classtype', 'sailnos', 'sailor'], // properties to be displayed in the suggestions box and the textbox
+			resultFormat: '{0} {1} ({2})' // format string for displaying the returned properties
 		};
 
 		options = $.extend(true, {}, defaults, options);
