@@ -27,6 +27,7 @@
 		options = $.extend(true, {}, defaults, options);
 
 		var suggestionsBox = $('<div class="suggestionsBox"></div>').appendTo('body');
+		var numberOfMatches = 0;
 		var lastKnownCaretPosition = 0;
 		var lastSelectedSuggestion = 0;
 
@@ -81,7 +82,7 @@
 				highlightMatch(suggestionsBox, lastSelectedSuggestion);
 				e.preventDefault();
 				return;
-			} else if((e.keyCode == 39 || e.keyCode == 9 || e.keyCode == 13) && suggestionsBox.is(":visible")) { // tab key
+			} else if((e.keyCode == 39 || e.keyCode == 9 || e.keyCode == 13) && suggestionsBox.is(":visible") && numberOfMatches > 0) { // tab key
 				replaceWordInTextbox(suggestionsBox.find('ul li.selected'));
 				lastSelectedSuggestion = 0;
 				e.stopImmediatePropagation();
@@ -103,7 +104,7 @@
 			if(options.lookupRegex.test(currentWord)) {
 				lastActiveTextBox = this;
 				suggestionsBox.show();
-				showMatches(this, suggestionsBox, currentWord, lookupData, options);
+				numberOfMatches = showMatches(this, suggestionsBox, currentWord, lookupData, options);
 				highlightMatch(suggestionsBox, lastSelectedSuggestion);
 			} else {
 				suggestionsBox.hide();
@@ -190,6 +191,7 @@
 		})
 
 		suggestionsBox.empty().append(suggestions);
+		return matches.length;
 	}
 
 	function getMatches(input, lookupData, settings) {
