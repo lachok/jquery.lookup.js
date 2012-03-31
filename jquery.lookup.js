@@ -196,7 +196,7 @@
 		//console.log('Showing matches for "' + input + '"');
 		var toReturn = [];
 		for(var i = 0; i < lookupData.length; i++) {
-			if(new RegExp(input, 'i').test(lookupData[i][settings.propertyToMatch] + '')) {
+			if((lookupData[i][settings.propertyToMatch] + '').toLowerCase().indexOf(input.toLowerCase()) > -1) {
 				var match = {};
 				for(var j = 0; j < settings.propertiesToReturn.length; j++) {
 					match[settings.propertiesToReturn[j]] = lookupData[i][settings.propertiesToReturn[j]]
