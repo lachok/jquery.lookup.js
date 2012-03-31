@@ -20,7 +20,8 @@
 			propertyToMatch: 'sailnos', // property against which to lookup
 			propertiesToReturn: ['Classtype', 'sailnos', 'sailor'], // properties to be displayed in the suggestions box and the textbox
 			resultFormat: '{0} {1} ({2})', // format string for displaying the returned properties
-			dataProperty: ''
+			dataProperty: '',
+			matchOnlyBeginningOfWord: false
 		};
 
 		options = $.extend(true, {}, defaults, options);
@@ -196,7 +197,8 @@
 		//console.log('Showing matches for "' + input + '"');
 		var toReturn = [];
 		for(var i = 0; i < lookupData.length; i++) {
-			if((lookupData[i][settings.propertyToMatch] + '').toLowerCase().indexOf(input.toLowerCase()) > -1) {
+			if((!settings.matchOnlyBeginningOfWord && (lookupData[i][settings.propertyToMatch] + '').toLowerCase().indexOf(input.toLowerCase()) > -1)
+			 || (settings.matchOnlyBeginningOfWord && (lookupData[i][settings.propertyToMatch] + '').toLowerCase().indexOf(input.toLowerCase()) == 0)) {
 				var match = {};
 				for(var j = 0; j < settings.propertiesToReturn.length; j++) {
 					match[settings.propertiesToReturn[j]] = lookupData[i][settings.propertiesToReturn[j]]
