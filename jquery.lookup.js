@@ -21,7 +21,8 @@
 			propertiesToReturn: ['Classtype', 'sailnos', 'sailor'], // properties to be displayed in the suggestions box and the textbox
 			resultFormat: '{0} {1} ({2})', // format string for displaying the returned properties
 			dataProperty: '',
-			matchOnlyBeginningOfWord: false
+			matchOnlyBeginningOfWord: false,
+			noMatchesText: ''
 		};
 
 		options = $.extend(true, {}, defaults, options);
@@ -103,8 +104,10 @@
 
 			if(options.lookupRegex.test(currentWord)) {
 				lastActiveTextBox = this;
-				suggestionsBox.show();
 				numberOfMatches = showMatches(this, suggestionsBox, currentWord, lookupData, options);
+				if(options.noMatchesText !== '' || numberOfMatches > 0){
+					suggestionsBox.show();
+				}
 				highlightMatch(suggestionsBox, lastSelectedSuggestion);
 			} else {
 				suggestionsBox.hide();
@@ -174,7 +177,7 @@
 
 	function showMatches(textbox, suggestionsBox, lookup, lookupData, settings) {
 		var matches = getMatches(lookup, lookupData, settings);
-		var suggestions = 'No matches found.'
+		var suggestions = settings.noMatchesText;
 		if(matches.length > 0) {
 			suggestions = '<ul>' + $.map(matches, function(match, ixMatch){
 				return '<li>' 
