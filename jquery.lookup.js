@@ -19,7 +19,8 @@
 			textboxSelector: this.selector, // the text entry elements to watch
 			propertyToMatch: 'sailnos', // property against which to lookup
 			propertiesToReturn: ['Classtype', 'sailnos', 'sailor'], // properties to be displayed in the suggestions box and the textbox
-			resultFormat: '{0} {1} ({2})' // format string for displaying the returned properties
+			resultFormat: '{0} {1} ({2})', // format string for displaying the returned properties
+			dataProperty: ''
 		};
 
 		options = $.extend(true, {}, defaults, options);
@@ -109,7 +110,11 @@
 		});
 
 		getLookupData(options.lookupUrl, function(data) {
-			lookupData = data;
+			if(options.dataProperty !== '') {
+				lookupData = data[options.dataProperty];
+			} else {
+				lookupData = data;
+			}
 		});
 	};
 
@@ -170,9 +175,10 @@
 		var suggestions = 'No matches found.'
 		if(matches.length > 0) {
 			suggestions = '<ul>' + $.map(matches, function(match, ixMatch){
-				return '<li>' + $.map(settings.propertiesToReturn, function(el, ix){
+				return '<li>' 
+					+ formatString.apply(null, [settings.resultFormat].concat($.map(settings.propertiesToReturn, function(el, ix){
 					return '<span class="' + settings.propertiesToReturn[ix] + '">' + match[el] + '</span>'
-				}).join(' ') + '</li>';
+				}))) + '</li>';
 			}).join('') + '</ul>';
 		}
 
@@ -190,7 +196,7 @@
 		//console.log('Showing matches for "' + input + '"');
 		var toReturn = [];
 		for(var i = 0; i < lookupData.length; i++) {
-			if((lookupData[i][settings.propertyToMatch] + '').indexOf(input) > -1) {
+			if(new RegExp(input, 'i').test(lookupData[i][settings.propertyToMatch] + '')) {
 				var match = {};
 				for(var j = 0; j < settings.propertiesToReturn.length; j++) {
 					match[settings.propertiesToReturn[j]] = lookupData[i][settings.propertiesToReturn[j]]
